@@ -1,0 +1,2240 @@
+{
+  "version": "1.0.0",
+  "title": "slack",
+  "type": "object",
+  "description": "A messaging app for teams",
+  "configuration": {
+    "access": "public",
+    "owners": [
+      "jhaynie@appcelerator.com",
+      "dtoth@appcelerator.com",
+      "mgoff@appcelerator.com",
+      "tlukasavage@appcelerator.com",
+      "cng@appcelerator.com"
+    ],
+    "assets": {
+      "logo": "logo.png"
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "access_token": {
+        "type": "string"
+      },
+      "refresh_token": {
+        "type": "string"
+      }
+    },
+    "oauth_2_0Configuration": {
+      "authorizationUrl": "https://slack.com/oauth/authorize",
+      "description": "",
+      "flow": "accessCode",
+      "scopes": {
+        "admin": "",
+        "channels:history": "",
+        "channels:read": "",
+        "channels:write": "",
+        "chat:write:bot": "",
+        "chat:write:user": "",
+        "client": "",
+        "dnd:read": "",
+        "dnd:write": "",
+        "emoji:read": "",
+        "files:read": "",
+        "files:write:user": "",
+        "groups:history": "",
+        "groups:read": "",
+        "groups:write": "",
+        "identify": "",
+        "identity.basic": "",
+        "im:history": "",
+        "im:read": "",
+        "im:write": "",
+        "mpim:history": "",
+        "mpim:read": "",
+        "mpim:write": "",
+        "pins:read": "",
+        "pins:write": "",
+        "reactions:read": "",
+        "reactions:write": "",
+        "reminders:read": "",
+        "reminders:write": "",
+        "search:read": "",
+        "stars:read": "",
+        "stars:write": "",
+        "team:read": "",
+        "usergroups:read": "",
+        "usergroups:write": "",
+        "users.profile:read": "",
+        "users.profile:write": "",
+        "users:read": "",
+        "users:write": ""
+      },
+      "tokenUrl": "https://slack.com/api/oauth.access",
+      "type": "oauth2"
+    }
+  },
+  "functions": {
+    "getAuthTest": {
+      "description": "Checks authentication and tells you who you are.",
+      "parameters": {
+        "token": {
+          "description": "Authentication token",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      },
+      "security": [
+        {
+          "oauth_2_0": [
+            "identify"
+          ]
+        }
+      ]
+    },
+    "getChannelsHistory": {
+      "description": "Fetches history of messages and events from a channel.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "latest": {
+          "default": "now",
+          "description": "Timestamp of the oldest recent seen message.",
+          "in": "query",
+          "type": "string"
+        },
+        "oldest": {
+          "description": "Timestamp of the latest previously seen message.",
+          "in": "query",
+          "type": "string"
+        },
+        "count": {
+          "default": 100,
+          "description": "Number of messages to return, between 1 and 1000.",
+          "in": "query",
+          "type": "number"
+        },
+        "has_more": {
+          "in": "query",
+          "type": "boolean"
+        },
+        "is_limited": {
+          "in": "query",
+          "type": "boolean"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChannelsInfo": {
+      "description": "Gets information about a channel.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChannelsInvite": {
+      "description": "Invites a user to a channel.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "user": {
+          "description": "User to invite to channel.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChannelsJoin": {
+      "description": "Joins a channel, creating it if needed.",
+      "parameters": {
+        "name": {
+          "description": "Name of channel to join",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChannelsLeave": {
+      "description": "Leaves a channel.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChannelsList": {
+      "description": "Lists all channels in a Slack team.",
+      "parameters": {
+        "exclude_archived": {
+          "description": "Don't return archived channels.",
+          "in": "query",
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChannelsMark": {
+      "description": "Sets the read cursor in a channel.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "ts": {
+          "description": "Timestamp of the most recently seen message.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChannelsSetPurpose": {
+      "description": "Sets the purpose for a channel.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "purpose": {
+          "description": "The new purpose",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChannelsSetTopic": {
+      "description": "Sets the topic for a channel.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "topic": {
+          "description": "The new topic",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChatDelete": {
+      "description": "Deletes a message.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "ts": {
+          "description": "Timestamp of the most recently seen message.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChatPostMessage": {
+      "description": "Sends a message to a channel.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "text": {
+          "description": "Text of the message to send. See below for an explanation of formatting.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "username": {
+          "description": "Name of bot.",
+          "in": "query",
+          "type": "string"
+        },
+        "parse": {
+          "description": "Change how messages are treated. See below.",
+          "in": "query",
+          "type": "string"
+        },
+        "link_names": {
+          "description": "Find and link channel names and usernames.",
+          "in": "query",
+          "type": "string"
+        },
+        "unfurl_links": {
+          "description": "Pass 1 to enable unfurling of primarily text-based content.",
+          "in": "query",
+          "type": "string"
+        },
+        "icon_url": {
+          "description": "URL to an image to use as the icon for this message",
+          "in": "query",
+          "type": "string"
+        },
+        "icon_emoji": {
+          "description": "emoji to use as the icon for this message. Overrides icon_url.",
+          "in": "query",
+          "type": "string"
+        },
+        "attachments": {
+          "description": "Structured message attachments.",
+          "in": "query",
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getChatUpdate": {
+      "description": "Updates a message.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "text": {
+          "description": "Text of the message to send. See below for an explanation of formatting.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "ts": {
+          "description": "Timestamp of the most recently seen message.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getEmojiList": {
+      "description": "Lists custom emoji for a team.",
+      "parameters": {},
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getFilesInfo": {
+      "description": "Gets information about a team file.",
+      "parameters": {
+        "file": {
+          "description": "File to fetch info for",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "count": {
+          "default": 100,
+          "description": "Number of items to return per page.",
+          "in": "query",
+          "type": "number"
+        },
+        "page": {
+          "default": 1,
+          "description": "Page number of results to return.",
+          "in": "query",
+          "type": "number"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getFilesList": {
+      "description": "Lists and filters team files.",
+      "parameters": {
+        "file": {
+          "description": "File to fetch info for",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "user": {
+          "description": "Filter files created by a single user.",
+          "in": "query",
+          "type": "string"
+        },
+        "ts_from": {
+          "description": "Filter files created after this timestamp (inclusive).",
+          "in": "query",
+          "type": "string"
+        },
+        "ts_to": {
+          "default": "now",
+          "description": "Filter files created before this timestamp (inclusive).",
+          "in": "query",
+          "type": "string"
+        },
+        "types": {
+          "description": "You can pass multiple values in the types argument, like types=posts,snippets.The default value is all, which does not filter the list.",
+          "enum": [
+            "pdfs",
+            "zips",
+            "posts",
+            "images",
+            "snippets",
+            "gdocs",
+            "all"
+          ],
+          "in": "query",
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getFilesUpload": {
+      "description": "Uploads or creates a file.",
+      "parameters": {
+        "file": {
+          "description": "File contents via multipart/form-data.",
+          "in": "query",
+          "type": "string"
+        },
+        "content": {
+          "description": "File contents via a POST var.",
+          "in": "query",
+          "type": "string"
+        },
+        "filetype": {
+          "description": "Slack-internal file type identifier.",
+          "in": "query",
+          "type": "string"
+        },
+        "filename": {
+          "description": "Filename of file.",
+          "in": "query",
+          "type": "string"
+        },
+        "title": {
+          "description": "Title of file.",
+          "in": "query",
+          "type": "string"
+        },
+        "initial_comment": {
+          "description": "Initial comment to add to file.",
+          "in": "query",
+          "type": "string"
+        },
+        "channels": {
+          "description": "Comma separated list of channels to share the file into.",
+          "in": "query",
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getGroupsHistory": {
+      "description": "Fetches history of messages and events from a private group.",
+      "parameters": {
+        "channel": {
+          "description": "Group to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "latest": {
+          "default": "now",
+          "description": "Timestamp of the oldest recent seen message.",
+          "in": "query",
+          "type": "string"
+        },
+        "oldest": {
+          "description": "Timestamp of the latest previously seen message.",
+          "in": "query",
+          "type": "string"
+        },
+        "count": {
+          "default": 100,
+          "description": "Number of messages to return, between 1 and 1000.",
+          "in": "query",
+          "type": "number"
+        },
+        "has_more": {
+          "in": "query",
+          "type": "boolean"
+        },
+        "is_limited": {
+          "in": "query",
+          "type": "boolean"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getGroupsList": {
+      "description": "Lists private groups that the calling user has access to.",
+      "parameters": {
+        "exclude_archived": {
+          "description": "Don't return archived channels.",
+          "in": "query",
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getGroupsMark": {
+      "description": "Sets the read cursor in a private group.",
+      "parameters": {
+        "channel": {
+          "description": "Group to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "ts": {
+          "description": "Timestamp of the most recently seen message.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getGroupsSetPurpose": {
+      "description": "Sets the purpose for a private group.",
+      "parameters": {
+        "channel": {
+          "description": "Group to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "purpose": {
+          "description": "The new purpose",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getGroupsSetTopic": {
+      "description": "Sets the topic for a private group.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "topic": {
+          "description": "The new topic",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getImHistory": {
+      "description": "Fetches history of messages and events from direct message channel.",
+      "parameters": {
+        "channel": {
+          "description": "Direct message channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "latest": {
+          "default": "now",
+          "description": "Timestamp of the oldest recent seen message.",
+          "in": "query",
+          "type": "string"
+        },
+        "oldest": {
+          "description": "Timestamp of the latest previously seen message.",
+          "in": "query",
+          "type": "string"
+        },
+        "count": {
+          "default": 100,
+          "description": "Number of messages to return, between 1 and 1000.",
+          "in": "query",
+          "type": "number"
+        },
+        "has_more": {
+          "in": "query",
+          "type": "boolean"
+        },
+        "is_limited": {
+          "in": "query",
+          "type": "boolean"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getImList": {
+      "description": "Lists direct message channels for the calling user.",
+      "parameters": {},
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getImMark": {
+      "description": "Sets the read cursor in a direct message channel.",
+      "parameters": {
+        "channel": {
+          "description": "Channel to fetch history for.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "ts": {
+          "description": "Timestamp of the most recently seen message.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getSearchAll": {
+      "description": "Searches for messages and files matching a query.",
+      "parameters": {
+        "query": {
+          "description": "Search query. May contains booleans, etc.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "sort": {
+          "default": "score",
+          "description": "Return matches sorted by either score or timestamp.",
+          "enum": [
+            "timestamp",
+            "score"
+          ],
+          "in": "query",
+          "type": "string"
+        },
+        "sort_dir": {
+          "default": "desc",
+          "description": "Change sort direction to ascending (asc) or descending (desc).",
+          "enum": [
+            "desc",
+            "asc"
+          ],
+          "in": "query",
+          "type": "string"
+        },
+        "highlight": {
+          "description": "Pass a value of 1 to enable query highlight markers .",
+          "in": "query",
+          "type": "string"
+        },
+        "count": {
+          "default": 100,
+          "description": "Number of items to return per page.",
+          "in": "query",
+          "type": "number"
+        },
+        "page": {
+          "default": 1,
+          "description": "Page number of results to return.",
+          "in": "query",
+          "type": "number"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getSearchFiles": {
+      "description": "Searches for files matching a query.",
+      "parameters": {
+        "query": {
+          "description": "Search query. May contains booleans, etc.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "sort": {
+          "default": "score",
+          "description": "Return matches sorted by either score or timestamp.",
+          "enum": [
+            "timestamp",
+            "score"
+          ],
+          "in": "query",
+          "type": "string"
+        },
+        "sort_dir": {
+          "default": "desc",
+          "description": "Change sort direction to ascending (asc) or descending (desc).",
+          "enum": [
+            "desc",
+            "asc"
+          ],
+          "in": "query",
+          "type": "string"
+        },
+        "highlight": {
+          "description": "Pass a value of 1 to enable query highlight markers .",
+          "in": "query",
+          "type": "string"
+        },
+        "count": {
+          "default": 100,
+          "description": "Number of items to return per page.",
+          "in": "query",
+          "type": "number"
+        },
+        "page": {
+          "default": 1,
+          "description": "Page number of results to return.",
+          "in": "query",
+          "type": "number"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getSearchMessages": {
+      "description": "Searches for messages matching a query.",
+      "parameters": {
+        "query": {
+          "description": "Search query. May contains booleans, etc.",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        },
+        "sort": {
+          "default": "score",
+          "description": "Return matches sorted by either score or timestamp.",
+          "enum": [
+            "timestamp",
+            "score"
+          ],
+          "in": "query",
+          "type": "string"
+        },
+        "sort_dir": {
+          "default": "desc",
+          "description": "Change sort direction to ascending (asc) or descending (desc).",
+          "enum": [
+            "desc",
+            "asc"
+          ],
+          "in": "query",
+          "type": "string"
+        },
+        "highlight": {
+          "description": "Pass a value of 1 to enable query highlight markers .",
+          "in": "query",
+          "type": "string"
+        },
+        "count": {
+          "default": 100,
+          "description": "Number of items to return per page.",
+          "in": "query",
+          "type": "number"
+        },
+        "page": {
+          "default": 1,
+          "description": "Page number of results to return.",
+          "in": "query",
+          "type": "number"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    },
+    "getStarsList": {
+      "description": "Lists stars for a user.",
+      "parameters": {
+        "user": {
+          "description": "Show stars by this user. Defaults to the authed user.",
+          "in": "query",
+          "type": "string"
+        },
+        "count": {
+          "default": 100,
+          "description": "Number of items to return per page.",
+          "in": "query",
+          "type": "number"
+        },
+        "page": {
+          "default": 1,
+          "description": "Page number of results to return.",
+          "in": "query",
+          "type": "number"
+        }
+      },
+      "return": {
+        "success": {
+          "type": "Collection"
+        }
+      }
+    },
+    "getUsersList": {
+      "description": "Lists all users in a Slack team.",
+      "parameters": {},
+      "return": {
+        "success": {
+          "type": "Item"
+        }
+      }
+    }
+  },
+  "schemas": {
+    "user": {
+      "type": "object",
+      "fields": {
+        "ok": {
+          "type": "boolean"
+        },
+        "team": {
+          "type": "string"
+        },
+        "team_id": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "channelsHistory": {
+      "type": "object",
+      "fields": {
+        "has_more": {
+          "type": "boolean"
+        },
+        "latest": {
+          "type": "string"
+        },
+        "messages": {
+          "items": [
+            {
+              "properties": {
+                "text": {
+                  "type": "string"
+                },
+                "ts": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "is_starred": {
+                  "type": "boolean"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "ts": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "ts": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "wibblr": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          ],
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "searchAll": {
+      "type": "object",
+      "fields": {
+        "channel": {
+          "properties": {
+            "created": {
+              "type": "number"
+            },
+            "creator": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "is_archived": {
+              "type": "boolean"
+            },
+            "is_channel": {
+              "type": "boolean"
+            },
+            "is_general": {
+              "type": "boolean"
+            },
+            "is_member": {
+              "type": "boolean"
+            },
+            "last_read": {
+              "type": "string"
+            },
+            "latest": {
+              "properties": {
+                "attachments": {
+                  "items": {
+                    "properties": {
+                      "fallback": {
+                        "type": "string"
+                      },
+                      "from_url": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "number"
+                      },
+                      "image_bytes": {
+                        "type": "number"
+                      },
+                      "image_height": {
+                        "type": "number"
+                      },
+                      "image_url": {
+                        "type": "string"
+                      },
+                      "image_width": {
+                        "type": "number"
+                      },
+                      "service_name": {
+                        "type": "string"
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "title_link": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "ts": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "members": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "name": {
+              "type": "string"
+            },
+            "purpose": {
+              "properties": {
+                "creator": {
+                  "type": "string"
+                },
+                "last_set": {
+                  "type": "number"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "topic": {
+              "properties": {
+                "creator": {
+                  "type": "string"
+                },
+                "last_set": {
+                  "type": "number"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "unread_count": {
+              "type": "number"
+            },
+            "unread_count_display": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "channelsInvite": {
+      "type": "object",
+      "fields": {
+        "channel": {
+          "properties": {
+            "created": {
+              "type": "number"
+            },
+            "creator": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "is_archived": {
+              "type": "boolean"
+            },
+            "is_channel": {
+              "type": "boolean"
+            },
+            "is_general": {
+              "type": "boolean"
+            },
+            "is_member": {
+              "type": "boolean"
+            },
+            "last_read": {
+              "type": "string"
+            },
+            "latest": {
+              "properties": {
+                "subtype": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "ts": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "members": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "name": {
+              "type": "string"
+            },
+            "purpose": {
+              "properties": {
+                "creator": {
+                  "type": "string"
+                },
+                "last_set": {
+                  "type": "number"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "topic": {
+              "properties": {
+                "creator": {
+                  "type": "string"
+                },
+                "last_set": {
+                  "type": "number"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "unread_count": {
+              "type": "number"
+            },
+            "unread_count_display": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ok": {
+      "type": "object",
+      "fields": {
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "channels": {
+      "type": "object",
+      "fields": {
+        "channels": {
+          "items": {
+            "properties": {
+              "created": {
+                "type": "integer"
+              },
+              "creator": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "is_archived": {
+                "type": "boolean"
+              },
+              "is_member": {
+                "type": "boolean"
+              },
+              "members": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "name": {
+                "type": "string"
+              },
+              "num_members": {
+                "type": "number"
+              },
+              "purpose": {
+                "properties": {
+                  "creator": {
+                    "type": "string"
+                  },
+                  "last_set": {
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "topic": {
+                "properties": {
+                  "creator": {
+                    "type": "string"
+                  },
+                  "last_set": {
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "purpose": {
+      "type": "object",
+      "fields": {
+        "ok": {
+          "type": "boolean"
+        },
+        "purpose": {
+          "type": "string"
+        }
+      }
+    },
+    "topic": {
+      "type": "object",
+      "fields": {
+        "ok": {
+          "type": "boolean"
+        },
+        "topic": {
+          "type": "string"
+        }
+      }
+    },
+    "chatOk": {
+      "type": "object",
+      "fields": {
+        "channel": {
+          "type": "string"
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "ts": {
+          "type": "string"
+        }
+      }
+    },
+    "chatUpdate": {
+      "type": "object",
+      "fields": {
+        "channel": {
+          "type": "string"
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "text": {
+          "type": "string"
+        },
+        "ts": {
+          "type": "string"
+        }
+      }
+    },
+    "emojiList": {
+      "type": "object",
+      "fields": {
+        "emoji": {
+          "properties": {
+            "bowtie": {
+              "type": "string"
+            },
+            "shipit": {
+              "type": "string"
+            },
+            "squirrel": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "fileObj": {
+      "type": "object",
+      "fields": {
+        "file": {
+          "type": "object"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "files": {
+      "type": "object",
+      "fields": {
+        "files": {
+          "items": {
+            "properties": {
+              "channels": {
+                "items": {},
+                "type": "array"
+              },
+              "comments_count": {
+                "type": "number"
+              },
+              "created": {
+                "type": "number"
+              },
+              "editable": {
+                "type": "boolean"
+              },
+              "external_type": {
+                "type": "string"
+              },
+              "filetype": {
+                "type": "string"
+              },
+              "groups": {
+                "items": {},
+                "type": "array"
+              },
+              "id": {
+                "type": "string"
+              },
+              "ims": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "initial_comment": {
+                "properties": {
+                  "comment": {
+                    "type": "string"
+                  },
+                  "created": {
+                    "type": "number"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "timestamp": {
+                    "type": "number"
+                  },
+                  "user": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "is_external": {
+                "type": "boolean"
+              },
+              "is_public": {
+                "type": "boolean"
+              },
+              "mimetype": {
+                "type": "string"
+              },
+              "mode": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "permalink": {
+                "type": "string"
+              },
+              "permalink_public": {
+                "type": "string"
+              },
+              "pretty_type": {
+                "type": "string"
+              },
+              "public_url_shared": {
+                "type": "boolean"
+              },
+              "size": {
+                "type": "number"
+              },
+              "timestamp": {
+                "type": "number"
+              },
+              "title": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "url_download": {
+                "type": "string"
+              },
+              "url_private": {
+                "type": "string"
+              },
+              "url_private_download": {
+                "type": "string"
+              },
+              "user": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "paging": {
+          "properties": {
+            "count": {
+              "type": "number"
+            },
+            "page": {
+              "type": "number"
+            },
+            "pages": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        }
+      }
+    },
+    "groups": {
+      "type": "object",
+      "fields": {
+        "groups": {
+          "items": {
+            "properties": {
+              "created": {
+                "type": "number"
+              },
+              "creator": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "is_archived": {
+                "type": "boolean"
+              },
+              "is_group": {
+                "type": "boolean"
+              },
+              "members": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "name": {
+                "type": "string"
+              },
+              "purpose": {
+                "properties": {
+                  "creator": {
+                    "type": "string"
+                  },
+                  "last_set": {
+                    "type": "number"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "topic": {
+                "properties": {
+                  "creator": {
+                    "type": "string"
+                  },
+                  "last_set": {
+                    "type": "number"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ims": {
+      "type": "object",
+      "fields": {
+        "ims": {
+          "items": {
+            "properties": {
+              "created": {
+                "type": "number"
+              },
+              "id": {
+                "type": "string"
+              },
+              "is_user_deleted": {
+                "type": "boolean"
+              },
+              "user": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "searchFiles": {
+      "type": "object",
+      "fields": {
+        "files": {
+          "properties": {
+            "matches": {
+              "items": {
+                "properties": {
+                  "channels": {
+                    "items": {},
+                    "type": "array"
+                  },
+                  "comments_count": {
+                    "type": "number"
+                  },
+                  "created": {
+                    "type": "number"
+                  },
+                  "edit_link": {
+                    "type": "string"
+                  },
+                  "editable": {
+                    "type": "boolean"
+                  },
+                  "external_type": {
+                    "type": "string"
+                  },
+                  "filetype": {
+                    "type": "string"
+                  },
+                  "groups": {
+                    "items": {},
+                    "type": "array"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "ims": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "initial_comment": {
+                    "properties": {
+                      "comment": {
+                        "type": "string"
+                      },
+                      "created": {
+                        "type": "number"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "timestamp": {
+                        "type": "number"
+                      },
+                      "user": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "is_external": {
+                    "type": "boolean"
+                  },
+                  "is_public": {
+                    "type": "boolean"
+                  },
+                  "lines": {
+                    "type": "number"
+                  },
+                  "lines_more": {
+                    "type": "number"
+                  },
+                  "mimetype": {
+                    "type": "string"
+                  },
+                  "mode": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "permalink": {
+                    "type": "string"
+                  },
+                  "permalink_public": {
+                    "type": "string"
+                  },
+                  "pretty_type": {
+                    "type": "string"
+                  },
+                  "preview": {
+                    "type": "string"
+                  },
+                  "preview_highlight": {
+                    "type": "string"
+                  },
+                  "public_url_shared": {
+                    "type": "boolean"
+                  },
+                  "size": {
+                    "type": "number"
+                  },
+                  "timestamp": {
+                    "type": "number"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "url_download": {
+                    "type": "string"
+                  },
+                  "url_private": {
+                    "type": "string"
+                  },
+                  "url_private_download": {
+                    "type": "string"
+                  },
+                  "user": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "pagination": {
+              "properties": {
+                "first": {
+                  "type": "number"
+                },
+                "last": {
+                  "type": "number"
+                },
+                "page": {
+                  "type": "number"
+                },
+                "page_count": {
+                  "type": "number"
+                },
+                "per_page": {
+                  "type": "number"
+                },
+                "total_count": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "paging": {
+              "properties": {
+                "count": {
+                  "type": "number"
+                },
+                "page": {
+                  "type": "number"
+                },
+                "pages": {
+                  "type": "number"
+                },
+                "total": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "total": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "query": {
+          "type": "string"
+        }
+      }
+    },
+    "searchMessages": {
+      "type": "object",
+      "fields": {
+        "messages": {
+          "properties": {
+            "matches": {
+              "items": [
+                {
+                  "properties": {
+                    "channel": {
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "next": {
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "ts": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "next_2": {
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "ts": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "permalink": {
+                      "type": "string"
+                    },
+                    "previous": {
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "ts": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "previous_2": {
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "ts": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "ts": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "channel": {
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "permalink": {
+                      "type": "string"
+                    },
+                    "previous": {
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "ts": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "previous_2": {
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "ts": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "ts": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              ],
+              "type": "array"
+            },
+            "pagination": {
+              "properties": {
+                "first": {
+                  "type": "number"
+                },
+                "last": {
+                  "type": "number"
+                },
+                "page": {
+                  "type": "number"
+                },
+                "page_count": {
+                  "type": "number"
+                },
+                "per_page": {
+                  "type": "number"
+                },
+                "total_count": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "paging": {
+              "properties": {
+                "count": {
+                  "type": "number"
+                },
+                "page": {
+                  "type": "number"
+                },
+                "pages": {
+                  "type": "number"
+                },
+                "total": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "total": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "query": {
+          "type": "string"
+        }
+      }
+    },
+    "starList": {
+      "type": "object",
+      "fields": {
+        "items": {
+          "items": [
+            {
+              "properties": {
+                "channel": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "file": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "comment": {
+                  "type": "string"
+                },
+                "file": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "channel": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          ],
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "paging": {
+          "properties": {
+            "count": {
+              "type": "number"
+            },
+            "page": {
+              "type": "number"
+            },
+            "pages": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        }
+      }
+    },
+    "usersList": {
+      "type": "object",
+      "fields": {
+        "members": {
+          "items": {
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "deleted": {
+                "type": "boolean"
+              },
+              "has_files": {
+                "type": "boolean"
+              },
+              "id": {
+                "type": "string"
+              },
+              "is_admin": {
+                "type": "boolean"
+              },
+              "is_owner": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "profile": {
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "image_192": {
+                    "type": "string"
+                  },
+                  "image_24": {
+                    "type": "string"
+                  },
+                  "image_32": {
+                    "type": "string"
+                  },
+                  "image_48": {
+                    "type": "string"
+                  },
+                  "image_72": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "real_name": {
+                    "type": "string"
+                  },
+                  "skype": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
